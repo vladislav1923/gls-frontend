@@ -38,8 +38,8 @@ const useTypeScript = fs.existsSync(paths.appTsConfig);
 // const cssRegex = /\.css$/;
 const lessRegex = /\.(?:le|c)ss$/;
 const cssModuleRegex = /\.module\.css$/;
-const sassRegex = /\.(scss|sass)$/;
-const sassModuleRegex = /\.module\.(scss|sass)$/;
+const sassRegex = /\.(scss|sass|less)$/;
+const sassModuleRegex = /\.module\.(scss|sass|less)$/;
 
 // This is the production and development configuration.
 // It is focused on developer experience, fast rebuilds, and a minimal bundle.

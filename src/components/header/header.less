@@ -1,0 +1,27 @@
+@import '../../styles/vars';
+
+.header {
+  height: 78px;
+  padding: 20px;
+  background-color: @lightBlueColor;
+  box-shadow: 0 0 10px rgba(0,0,0,0.4);
+
+  .title {
+    font-family: @fontLight;
+    font-size: 40px;
+    color: @whiteColor;
+    margin-left: 12px;
+  }
+}
+
+@media only screen and (max-width: @mobileWidth) {
+  .mobile-title {
+    display: none;
+  }
+}
+
+@media only screen and (min-width: @mobileWidth) {
+  .not-mobile-title {
+    display: none;
+  }
+}
