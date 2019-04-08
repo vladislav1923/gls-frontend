@@ -1,6 +1,21 @@
 @import '../../styles/vars';
 
 .shell {
+  display: flex;
+  flex-direction: column;
   height: 100vh;
   background-color: @grayColor;
+}
+
+header{
+  /* 0 flex-grow, 0 flex-shrink, auto flex-basis */
+  flex: 0 0 auto;
+}
+section{
+  /* 1 flex-grow, 0 flex-shrink, auto flex-basis */
+  flex: 1 0 auto;
+}
+footer{
+  /* 0 flex-grow, 0 flex-shrink, auto flex-basis */
+  flex: 0 0 auto;
 }

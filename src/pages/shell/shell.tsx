@@ -1,12 +1,19 @@
 import React, {Component} from 'react';
 import './shell.less';
 import Header from "../../components/header/header";
+import Footer from "../../components/footer/footer";
 
 class Shell extends Component {
     render() {
         return (
             <main className="shell">
-                <Header />
+                <header>
+                    <Header />
+                </header>
+                <section></section>
+                <footer>
+                    <Footer />
+                </footer>
             </main>
         );
     }

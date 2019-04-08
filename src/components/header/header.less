@@ -12,16 +12,25 @@
     color: @whiteColor;
     margin-left: 12px;
   }
-}
 
-@media only screen and (max-width: @mobileWidth) {
-  .mobile-title {
+  .desktop-title,
+  .tablet-title {
     display: none;
+  }
+
+  .add-link-button-text {
+    margin-left: 8px;
   }
 }
 
-@media only screen and (min-width: @mobileWidth) {
-  .not-mobile-title {
-    display: none;
+@media only screen and (min-width: @tabletWidth) {
+  .header .desktop-title {
+    display: inline-block;
+  }
+}
+
+@media only screen and (min-width: @mobileWidth) and (max-width: @tabletWidth) {
+  .header .tablet-title {
+    display: inline-block;
   }
 }

@@ -1,0 +1,25 @@
+@import '../../styles/vars';
+
+.button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 40px;
+  font-family: @fontRegular;
+  font-size: 16px;
+  color: @whiteColor;
+  background-color: @lightBlueColor;
+  border-radius: 16px;
+  border: 2px solid @whiteColor;
+  outline: none;
+  appearance: none;
+  padding: 0 12px;
+  margin: 0 12px;
+  cursor: pointer;
+  transition: all .2s linear;
+
+  &:hover {
+    background-color: @whiteColor;
+    color: @lightBlueColor;
+  }
+}
