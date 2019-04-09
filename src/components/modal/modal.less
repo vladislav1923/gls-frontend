@@ -1,0 +1,37 @@
+@import '../../styles/vars';
+
+.dialog {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  z-index: 1000;
+
+  .background {
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    z-index: 900;
+    background-color: rgba(@blackColor, .5);
+  }
+
+  .content {
+    position: relative;
+    background-color: @grayColor;
+    z-index: 950;
+
+    .close-button {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      color: @blackColor;
+      cursor: pointer;
+    }
+  }
+}

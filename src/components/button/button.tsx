@@ -1,14 +1,18 @@
 import React, {Component} from 'react';
 import './button.less';
 
-class Button extends Component {
-    constructor(props: Readonly<{}>) {
+type Props = {
+    onClick: () => void
+}
+
+class Button extends Component<Props> {
+    constructor(props: Props) {
         super(props)
     }
 
     render() {
         return (
-            <button className="button">
+            <button className="button" onClick={this.props.onClick}>
                 {this.props.children}
             </button>
         );
