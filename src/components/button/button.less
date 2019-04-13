@@ -4,22 +4,72 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 40px;
-  font-family: @fontRegular;
-  font-size: 16px;
-  color: @whiteColor;
-  background-color: @lightBlueColor;
+  font-family: @fontBold;
+  font-size: 18px;
   border-radius: 16px;
-  border: 2px solid @whiteColor;
   outline: none;
   appearance: none;
-  padding: 0 12px;
+  padding: 0 32px;
   margin: 0 12px;
   cursor: pointer;
   transition: all .2s linear;
 
-  &:hover {
-    background-color: @whiteColor;
-    color: @lightBlueColor;
+  &.white {
+    color: @blackColor;
+    background-color: @grayColor;
+    border: 2px solid @lightBlueColor;
+
+    &:hover {
+      border-color: @darkBlueColor;
+    }
+  }
+
+  &.blue {
+    color: @whiteColor;
+    background-color: @lightBlueColor;
+    border: 2px solid @whiteColor;
+
+    &:hover {
+      background-color: @whiteColor;
+      color: @lightBlueColor;
+    }
+  }
+
+  &.md {
+    height: 40px;
+  }
+
+  &.lg {
+    width: 100%;
+    margin: 0;
+    height: 48px;
+  }
+
+  &.process {
+    border-color: @lightBlueColor;
+    background-image: linear-gradient(
+            45deg, @lightBlueColor 25%,
+            transparent 25%,
+            transparent 50%,
+            @lightBlueColor 50%,
+            @lightBlueColor 75%,
+            transparent 75%,
+            transparent
+    );
+    background-size: 50px 50px;
+    animation: loading-stripes .8s linear infinite;
+
+    &:hover {
+      border-color: @lightBlueColor;
+    }
+  }
+
+  @keyframes loading-stripes {
+    0% {
+      background-position: 0
+    }
+    100% {
+      background-position: 50px
+    }
   }
 }

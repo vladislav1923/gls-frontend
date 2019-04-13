@@ -1,0 +1,75 @@
+@import 'vars';
+
+body {
+  font-family: @fontRegular, Arial, serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  color: @blackColor;
+  margin: 0;
+  padding: 0;
+}
+
+.container {
+  max-width: @desktopWidth;
+  min-width: 340px;
+  margin: 0 auto;
+}
+
+h2 {
+  font-family: @fontBold;
+  font-size: 24px;
+  line-height: 24px;
+  color: @blackColor;
+  margin-bottom: 8px;
+}
+
+span.sub-header {
+  display: inline-block;
+  font-family: @fontRegular;
+  font-size: 16px;
+  line-height: 24px;
+  color: @darkGrayColor;
+  margin-bottom: 16px;
+}
+
+input, textarea {
+  display: inline-block;
+  width: 100%;
+  font-family: @fontRegular;
+  font-size: 16px;
+  color: @blackColor;
+  padding: 16px 0;
+  border: none;
+  outline: none;
+  background-color: @grayColor;
+  border-bottom: 2px solid @lightBlueColor;
+  margin-bottom: 16px;
+
+  &:hover,
+  &:focus {
+    border-color: @darkBlueColor;
+  }
+}
+
+label {
+  display: inline-block;
+  width: 100%;
+}
+
+.margin-top {
+
+  &-lg {
+    margin-top: 32px;
+  }
+}
+
+.margin-bottom {
+
+  &-md {
+    margin-bottom: 24px;
+  }
+
+  &-lg {
+    margin-bottom: 32px;
+  }
+}

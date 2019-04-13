@@ -6,6 +6,21 @@
   background-color: @lightBlueColor;
   box-shadow: 0 0 10px rgba(0,0,0,0.4);
 
+  &-wrapper {
+    display: flex;
+  }
+
+  &-left {
+    display: flex;
+    width: 30%;
+  }
+
+  &-right {
+    display: flex;
+    justify-content: flex-end;
+    width: 70%;
+  }
+
   .title {
     font-family: @fontLight;
     font-size: 40px;
@@ -21,6 +36,13 @@
   .add-link-button-text {
     margin-left: 8px;
   }
+
+  .form {
+    width: 500px;
+    min-width: 280px;
+    padding: 32px;
+  }
+
 }
 
 @media only screen and (min-width: @tabletWidth) {
@@ -32,5 +54,11 @@
 @media only screen and (min-width: @mobileWidth) and (max-width: @tabletWidth) {
   .header .tablet-title {
     display: inline-block;
+  }
+}
+
+@media only screen and (max-width: @mobileWidth) {
+  .header .form {
+    width: 90vw;
   }
 }
