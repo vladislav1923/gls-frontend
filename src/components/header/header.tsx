@@ -1,10 +1,13 @@
 import React, {Component} from 'react';
 import './header.less';
 import Logo from "../logo/logo";
+import Button from "../button/button";
 import ProfileMenu from "../profile-menu/profile-menu";
-import AddNote from "../add-note/add-note";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {NavLink} from "react-router-dom";
 
 class Header extends Component {
+
     render() {
         return (
             <div className="header">
@@ -16,7 +19,12 @@ class Header extends Component {
                             <span className="title tablet-title">GLS</span>
                         </div>
                         <div className="header-right">
-                            <AddNote/>
+                            <NavLink to="/new">
+                                <Button color="blue" size="md">
+                                    <FontAwesomeIcon icon="plus"/>
+                                    <span className="add-link-button-text">Добавить</span>
+                                </Button>
+                            </NavLink>
                             <ProfileMenu/>
                         </div>
                     </div>

@@ -5,7 +5,7 @@ type Props = {
     process?: boolean,
     color: 'white' | 'blue',
     size: 'md' | 'lg',
-    onClick: () => void
+    onClick?: () => void
 }
 
 class Button extends Component<Props> {
