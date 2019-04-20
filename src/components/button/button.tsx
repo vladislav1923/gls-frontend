@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import './button.less';
+import Spinner from "../spinner/spinner";
 
 type Props = {
     process?: boolean,
@@ -15,9 +16,9 @@ class Button extends Component<Props> {
 
     render() {
         return (
-            <button className={`button ${this.props.color} ${this.props.size} ${this.props.process && 'process'}`}
+            <button className={`button ${this.props.color} ${this.props.size}`}
                     onClick={this.props.onClick}>
-                {this.props.process || this.props.children}
+                {!this.props.process ? this.props.children : <Spinner>Подождем...</Spinner>}
             </button>
         );
     }

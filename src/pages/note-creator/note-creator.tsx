@@ -55,19 +55,28 @@ class NoteCreator extends Component<Props, State> {
     render() {
         return (
             <div>
-                <h2>Введите ссылку</h2>
-                <span className="sub-header">
-                    Ссылка должна вести на статью, которую вы хотите добавить.
-                    Пример ссылки: https://yandex.ru
-                </span>
-                <label className="margin-bottom-md">
-                    <input type="text" onFocus={this.onChangeLinkHandler} onChange={this.onChangeLinkHandler}
-                           placeholder="Введите ссылку"/>
-                    <div className="error-label">{this.state.errorLinkMessage}</div>
-                </label>
-                <Button process={true} color="white" size="lg" onClick={this.parsePageByLink}>
-                    <span className="add-link-button-text">Добавить ссылку</span>
-                </Button>
+                <div className="step">
+                    <h2>Шаг 1 / Введите ссылку</h2>
+                    <span className="sub-header">
+                        Ссылка должна вести на статью, которую вы хотите добавить.
+                        Пример ссылки: https://habr.com/ru/post/437108/
+                    </span>
+                    <div className="grid">
+                        <div className="col-8_sm-12">
+                            <label>
+                                <input type="text" onFocus={this.onChangeLinkHandler} onChange={this.onChangeLinkHandler}
+                                       placeholder="Введите ссылку"/>
+                                <div className="error-label">{this.state.errorLinkMessage}</div>
+                            </label>
+                        </div>
+                        <div className="col-4_sm-12">
+                            <Button process={this.state.linkParseProgress} color="white" size="lg"
+                                    onClick={this.parsePageByLink}>
+                                <span className="add-link-button-text">Следующий шаг</span>
+                            </Button>
+                        </div>
+                    </div>
+                </div>
             </div>
         );
     }
