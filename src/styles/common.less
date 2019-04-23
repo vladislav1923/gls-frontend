@@ -21,7 +21,7 @@ h2 {
   font-size: 24px;
   line-height: 24px;
   color: @blackColor;
-  margin-bottom: 16px;
+  margin-bottom: 24px;
 }
 
 span.sub-header {
@@ -30,7 +30,7 @@ span.sub-header {
   font-size: 16px;
   line-height: 24px;
   color: @darkGrayColor;
-  margin-bottom: 24px;
+  margin-bottom: 32px;
 }
 
 input, textarea {
@@ -44,7 +44,6 @@ input, textarea {
   outline: none;
   background-color: @grayColor;
   border-bottom: 2px solid @lightBlueColor;
-  margin-bottom: 16px;
 
   &:hover,
   &:focus {
@@ -52,29 +51,49 @@ input, textarea {
   }
 }
 
+textarea {
+  height: 100px;
+  resize: none;
+}
+
 label {
-  display: inline-block;
   width: 100%;
+  display: inline-block;
+}
+
+.label-text {
+  width: 100%;
+  display: inline-block;
+  font-family: @fontRegular;
+  font-size: 18px;
+  line-height: 24px;
+  color: @blackColor;
 }
 
 a {
   text-decoration: none;
 }
 
-.margin-top {
+.mt {
+  &-16 {
+    margin-top: 16px;
+  }
 
-  &-lg {
+  &-32 {
     margin-top: 32px;
   }
 }
 
-.margin-bottom {
+.mb {
+  &-16 {
+    margin-bottom: 16px;
+  }
 
-  &-md {
+  &-24 {
     margin-bottom: 24px;
   }
 
-  &-lg {
+  &-32 {
     margin-bottom: 32px;
   }
 }

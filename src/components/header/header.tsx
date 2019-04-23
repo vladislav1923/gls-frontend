@@ -19,7 +19,7 @@ class Header extends Component {
                             <span className="title tablet-title">GLS</span>
                         </div>
                         <div className="header-right">
-                            <NavLink to="/new">
+                            <NavLink to="/parse">
                                 <Button color="blue" size="md">
                                     <FontAwesomeIcon icon="plus"/>
                                     <span className="add-link-button-text">Добавить</span>

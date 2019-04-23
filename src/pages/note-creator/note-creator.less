@@ -7,3 +7,13 @@
 .error-label {
   color: @errorColor;
 }
+
+img {
+  width: 100%;
+}
+
+@media only screen and (max-width: @tabletWidth) {
+  .buttons-block {
+    flex-direction: column-reverse;
+  }
+}

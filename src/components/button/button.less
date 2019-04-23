@@ -20,6 +20,8 @@
     border: 2px solid @darkBlueColor;
 
     &:hover {
+      color: @whiteColor;
+      background-color: @darkBlueColor;
       border-color: @darkBlueColor;
     }
   }
@@ -30,8 +32,19 @@
     border: 2px solid @whiteColor;
 
     &:hover {
+      color: @blackColor;
       background-color: @grayColor;
-      color: @darkBlueColor;
+    }
+  }
+
+  &.gray {
+    color: @blackColor;
+    background-color: @grayColor;
+    border: 2px solid @grayColor;
+
+    &:hover {
+      background-color: @darkGrayColor;
+      border-color: @darkGrayColor;
     }
   }
 

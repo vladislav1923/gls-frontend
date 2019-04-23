@@ -4,7 +4,7 @@ import Spinner from "../spinner/spinner";
 
 type Props = {
     process?: boolean,
-    color: 'white' | 'blue',
+    color: 'white' | 'blue' | 'gray',
     size: 'md' | 'lg',
     onClick?: () => void
 }
