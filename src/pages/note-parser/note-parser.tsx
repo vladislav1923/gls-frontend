@@ -27,7 +27,7 @@ class NoteParser extends Component<RouteComponentProps & Props, State> {
     constructor(props: RouteComponentProps & Props) {
         super(props);
         this.state = {
-            link: '',
+            link: this.props.creatingNote.url || '',
             errorLinkMessage: null,
             linkParseProgress: false
         };
@@ -35,21 +35,13 @@ class NoteParser extends Component<RouteComponentProps & Props, State> {
         this.noteService = new NoteService();
     }
 
-    public onChangeLinkHandler = (event: React.ChangeEvent<HTMLInputElement>): void => {
-        this.setState({
-            link: event.target.value,
-            errorLinkMessage: ''
-        });
-    };
-
     public goToNextStep = async (): Promise<void> => {
         if (!this.state.linkParseProgress && this.validateLink()) {
             this.setState({linkParseProgress: true});
 
             const response = await this.noteService.parseUrl(this.state.link);
-            console.log(response);
             if (response.result) {
-                const data = new NoteModel();
+                const data = response.data as NoteModel;
                 data.url = this.state.link;
                 this.props.changeCreatingNote(data);
                 this.props.history.push('/create');
@@ -74,7 +66,6 @@ class NoteParser extends Component<RouteComponentProps & Props, State> {
         return true;
     }
 
-
     render() {
         return (
             <div>
@@ -87,8 +78,9 @@ class NoteParser extends Component<RouteComponentProps & Props, State> {
                     <div className="grid">
                         <div className="col-8_sm-12">
                             <label>
-                                <input type="text" onFocus={this.onChangeLinkHandler}
-                                       onChange={this.onChangeLinkHandler}
+                                <input type="text" value={this.state.link}
+                                       onFocus={() => this.setState({errorLinkMessage: ''})}
+                                       onChange={(e) => this.setState({link: e.target.value})}
                                        placeholder="Введите ссылку"/>
                                 <div className="error-label mt-16">{this.state.errorLinkMessage}</div>
                             </label>
