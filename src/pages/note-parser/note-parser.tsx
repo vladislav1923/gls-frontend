@@ -87,7 +87,7 @@ class NoteParser extends Component<RouteComponentProps & Props, State> {
                         </div>
                         <div className="col-4_sm-12">
                             <Button process={this.state.linkParseProgress} color="white" size="lg"
-                                    onClick={this.goToNextStep}>
+                                    fullWidth={true} onClick={this.goToNextStep}>
                                 <span className="add-link-button-text">Следующий шаг</span>
                             </Button>
                         </div>

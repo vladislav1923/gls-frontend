@@ -6,6 +6,7 @@ type Props = {
     process?: boolean,
     color: 'white' | 'blue' | 'gray',
     size: 'md' | 'lg',
+    fullWidth?: boolean
     onClick?: () => void
 }
 
@@ -16,7 +17,7 @@ class Button extends Component<Props> {
 
     render() {
         return (
-            <button className={`button ${this.props.color} ${this.props.size}`}
+            <button className={`button ${this.props.color} ${this.props.size} ${this.props.fullWidth ? 'full-width' : ''}`}
                     onClick={this.props.onClick}>
                 {!this.props.process ? this.props.children : <Spinner>Подождем...</Spinner>}
             </button>
