@@ -1,8 +1,9 @@
 import React, {Component} from 'react';
 import './spinner.less';
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 
-type Props = {}
+type Props = {
+    size: 'sm' | 'md'
+}
 
 class Spinner extends Component<Props> {
     constructor(props: Props) {
@@ -12,9 +13,7 @@ class Spinner extends Component<Props> {
     render() {
         return (
             <div className="spinner-wrapper">
-                <div className="spinner">
-                    <FontAwesomeIcon icon="spinner"/>
-                </div>
+                <div className={'spinner ' + this.props.size}/>
                 <span className={this.props.children ? 'show-text' : ''}>{this.props.children}</span>
             </div>
         );

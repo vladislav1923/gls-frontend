@@ -3,12 +3,14 @@ import {withRouter} from 'react-router-dom';
 import {RouteComponentProps} from "react-router";
 import {connect} from "react-redux";
 import {UnsplashService} from '../../services/unsplash.service';
+import {ScrollHandler} from '../../helpers/scroll-handler';
 import './note-creator.less';
 import Button from "../../components/button/button";
 import Tag from "../../components/tag/tag";
 import NoteModel from "../../models/note.model";
 import {actionTypes} from "../../store/create-note.reducer";
 import {removeLineTranslationSymbols, stringArrayToLowerCase} from '../../helpers/tools';
+import Spinner from "../../components/spinner/spinner";
 
 type Props = {
     creatingNote: NoteModel,
@@ -19,9 +21,11 @@ type State = {
     title: string,
     description: string,
     keywords: string[],
-    imageUrl?: string,
+    imageUrl: string,
     errorTitleMessage: string,
-    addingKeyword: string
+    addingKeyword: string,
+    linkWithoutImage: boolean,
+    updatingRandomImage: boolean
 }
 
 class NoteCreator extends Component<RouteComponentProps & Props, State> {
@@ -35,11 +39,14 @@ class NoteCreator extends Component<RouteComponentProps & Props, State> {
         // }
 
         this.state = {
-          title: removeLineTranslationSymbols(this.props.creatingNote.title),
-          description: removeLineTranslationSymbols(this.props.creatingNote.description),
-          keywords: stringArrayToLowerCase(this.props.creatingNote.keywords),
-          errorTitleMessage: '',
-          addingKeyword: ''
+            title: removeLineTranslationSymbols(this.props.creatingNote.title),
+            description: removeLineTranslationSymbols(this.props.creatingNote.description),
+            keywords: stringArrayToLowerCase(this.props.creatingNote.keywords),
+            imageUrl: '',
+            errorTitleMessage: '',
+            addingKeyword: '',
+            linkWithoutImage: false,
+            updatingRandomImage: false
         };
 
         this.unsplashService = new UnsplashService();
@@ -64,13 +71,31 @@ class NoteCreator extends Component<RouteComponentProps & Props, State> {
         this.setState({keywords: updatedKeywords});
     };
 
+    public updateImageUrl = async (): Promise<void> => {
+        if (!this.state.updatingRandomImage) {
+            this.setState({updatingRandomImage: true});
+            const updatedImageUrl = await this.unsplashService.getRandomImageUrl();
+            this.setState({imageUrl: updatedImageUrl});
+        }
+    };
+
     public goToNextStep = (): void => {
         if (this.validateLink()) {
+            const data = this.props.creatingNote;
+            data.title = this.state.title;
+            data.description = this.state.description;
+            data.keywords = this.state.keywords;
+            data.imageUrl = this.state.imageUrl;
+            this.props.changeCreatingNote(data);
             this.props.history.push('/group');
         }
     };
 
-    private setImageUrl = async(imageUrlFromProps: string | null): Promise<void> => {
+    public goToPrevStep = (): void => {
+        this.props.history.push('/parse');
+    };
+
+    private setImageUrl = async (imageUrlFromProps: string | null): Promise<void> => {
         let resultImageUrl = '';
 
         if (imageUrlFromProps) {
@@ -79,12 +104,16 @@ class NoteCreator extends Component<RouteComponentProps & Props, State> {
             resultImageUrl = await this.unsplashService.getRandomImageUrl();
         }
 
-        this.setState({imageUrl: resultImageUrl});
+        this.setState({
+            imageUrl: resultImageUrl,
+            linkWithoutImage: !imageUrlFromProps
+        });
     };
 
     private validateLink(): boolean {
         if (this.state.title.length === 0) {
             this.setState({errorTitleMessage: 'Давай заголовок добавим'});
+            ScrollHandler.scrollToId('step');
             return false;
         }
 
@@ -94,12 +123,12 @@ class NoteCreator extends Component<RouteComponentProps & Props, State> {
     render() {
         return (
             <div>
-                <div className="step">
+                <div id="step" className="step">
                     <h2>Шаг 2 / Добавление описания ссылки</h2>
                     <span className="sub-header">
                         Проверьте правильность описания страницы, на которую введет ссылка.
                         При необходимости исправьте описание и/или добавьте ссылку в соответствующую группу.
-                        По окончанию нажмите кнопку &laquo;Следующий шаг&raquo;	для перехода к выбору группы или
+                        По окончанию нажмите кнопку &laquo;Следующий шаг&raquo;    для перехода к выбору группы или
                         &laquo;Назад&raquo; для изменения ссылки.
                     </span>
                     <div className="grid grid-spaceBetween">
@@ -119,7 +148,7 @@ class NoteCreator extends Component<RouteComponentProps & Props, State> {
                                     <span className="label-text mb-16">Краткое описание</span>
                                     <textarea value={this.state.description}
                                               onChange={(e) => this.setState({description: e.target.value})}
-                                              placeholder="Укажите краткое описание" />
+                                              placeholder="Укажите краткое описание"/>
                                 </label>
                             </div>
                             <div className="mb-32">
@@ -130,7 +159,7 @@ class NoteCreator extends Component<RouteComponentProps & Props, State> {
                                     <div className="col-12">
                                         {this.state.keywords.map((keyword: string) =>
                                             <Tag key={keyword.toString()} value={keyword} canDelete={true}
-                                                 onDelete={(value) => this.deleteTag(value)} />
+                                                 onDelete={(value) => this.deleteTag(value)}/>
                                         )}
                                     </div>
                                     <div className="col-6_sm-12">
@@ -149,10 +178,24 @@ class NoteCreator extends Component<RouteComponentProps & Props, State> {
                                 </div>
                             </div>
                             {this.state.imageUrl &&
-                                <div className="mb-32">
-                                    <span className="label-text mb-16">Изображение</span>
-                                    <img src={this.state.imageUrl} alt=""/>
+                            <div className="mb-32">
+                                <span className="label-text mb-16">Изображение</span>
+                                {this.state.linkWithoutImage &&
+                                    <span className="sub-header">
+                                        Мы не нашли изображение на странице по ссылке и поэтому подобрали рандомную из интернета,
+                                        чтобы вам было удобнее работать со списком ссылок. Если она не подходит к этой статье -
+                                        можно <a className="link" onClick={this.updateImageUrl}>загрузить другую</a>.
+                                    </span>
+                                }
+                                <div className="image-wrapper">
+                                    {this.state.updatingRandomImage &&
+                                        <div className="image-spinner">
+                                            <Spinner size="md"/>
+                                        </div>
+                                    }
+                                    <img src={this.state.imageUrl} onLoad={() => this.setState({updatingRandomImage: false})} alt=""/>
                                 </div>
+                            </div>
                             }
                         </div>
                         <div className="col-4">
@@ -162,7 +205,7 @@ class NoteCreator extends Component<RouteComponentProps & Props, State> {
                     <div className="grid buttons-block mt-32">
                         <div className="col-4_sm-12">
                             <Button color="gray" size="lg" fullWidth={true}
-                                    onClick={() => console.log('hy')}>
+                                    onClick={this.goToPrevStep}>
                                 <span className="add-link-button-text">Назад</span>
                             </Button>
                         </div>
@@ -185,7 +228,7 @@ const stateToProps = (state: NoteModel) => {
     }
 };
 
-const dispatchToProps = (dispatch: (data: {type: actionTypes, data: NoteModel}) => void) => {
+const dispatchToProps = (dispatch: (data: { type: actionTypes, data: NoteModel }) => void) => {
     return {
         changeCreatingNote: (data: NoteModel) => dispatch({type: actionTypes.change, data}),
     }

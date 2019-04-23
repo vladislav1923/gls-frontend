@@ -19,7 +19,7 @@ class Button extends Component<Props> {
         return (
             <button className={`button ${this.props.color} ${this.props.size} ${this.props.fullWidth ? 'full-width' : ''}`}
                     onClick={this.props.onClick}>
-                {!this.props.process ? this.props.children : <Spinner>Подождем...</Spinner>}
+                {!this.props.process ? this.props.children : <Spinner size="sm">Подождем...</Spinner>}
             </button>
         );
     }
