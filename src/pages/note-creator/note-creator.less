@@ -7,24 +7,33 @@
 .image {
 
   &-wrapper {
-    position: relative;
-
     img {
       width: 100%;
     }
   }
 
-  &-spinner {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    z-index: 100;
-    background-color: rgba(@whiteColor, .8);
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  &-random {
+    position: relative;
+    line-height: 0;
+    cursor: pointer;
+
+    &:before {
+      content: '';
+      display: block;
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 100;
+      background-color: rgba(@blackColor, .7);
+    }
+
+    &.active {
+      &:before {
+        display: none;
+      }
+    }
   }
 }
 

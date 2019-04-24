@@ -10,7 +10,6 @@ import Tag from "../../components/tag/tag";
 import NoteModel from "../../models/note.model";
 import {actionTypes} from "../../store/create-note.reducer";
 import {removeLineTranslationSymbols, stringArrayToLowerCase} from '../../helpers/tools';
-import Spinner from "../../components/spinner/spinner";
 
 type Props = {
     creatingNote: NoteModel,
@@ -25,7 +24,7 @@ type State = {
     errorTitleMessage: string,
     addingKeyword: string,
     linkWithoutImage: boolean,
-    updatingRandomImage: boolean
+    randomImageUrls: string[]
 }
 
 class NoteCreator extends Component<RouteComponentProps & Props, State> {
@@ -34,9 +33,9 @@ class NoteCreator extends Component<RouteComponentProps & Props, State> {
 
     constructor(props: RouteComponentProps & Props) {
         super(props);
-        // if (!this.props.creatingNote.url) {
-        //     this.props.history.push('/parse');
-        // }
+        if (!this.props.creatingNote.url) {
+            this.props.history.push('/parse');
+        }
 
         this.state = {
             title: removeLineTranslationSymbols(this.props.creatingNote.title),
@@ -46,7 +45,7 @@ class NoteCreator extends Component<RouteComponentProps & Props, State> {
             errorTitleMessage: '',
             addingKeyword: '',
             linkWithoutImage: false,
-            updatingRandomImage: false
+            randomImageUrls: []
         };
 
         this.unsplashService = new UnsplashService();
@@ -71,14 +70,6 @@ class NoteCreator extends Component<RouteComponentProps & Props, State> {
         this.setState({keywords: updatedKeywords});
     };
 
-    public updateImageUrl = async (): Promise<void> => {
-        if (!this.state.updatingRandomImage) {
-            this.setState({updatingRandomImage: true});
-            const updatedImageUrl = await this.unsplashService.getRandomImageUrl();
-            this.setState({imageUrl: updatedImageUrl});
-        }
-    };
-
     public goToNextStep = (): void => {
         if (this.validateLink()) {
             const data = this.props.creatingNote;
@@ -96,17 +87,23 @@ class NoteCreator extends Component<RouteComponentProps & Props, State> {
     };
 
     private setImageUrl = async (imageUrlFromProps: string | null): Promise<void> => {
-        let resultImageUrl = '';
+        let imageUrl = '';
+        let randomImageUrls: string[] = [];
 
         if (imageUrlFromProps) {
-            resultImageUrl = imageUrlFromProps;
+            imageUrl = imageUrlFromProps;
         } else {
-            resultImageUrl = await this.unsplashService.getRandomImageUrl();
+            randomImageUrls[0] = await this.unsplashService.getRandomImageUrl();
+            randomImageUrls[1] = await this.unsplashService.getRandomImageUrl();
+            randomImageUrls[2] = await this.unsplashService.getRandomImageUrl();
+
+            imageUrl = randomImageUrls[0];
         }
 
         this.setState({
-            imageUrl: resultImageUrl,
-            linkWithoutImage: !imageUrlFromProps
+            imageUrl: imageUrl,
+            linkWithoutImage: !imageUrlFromProps,
+            randomImageUrls: randomImageUrls
         });
     };
 
@@ -178,24 +175,30 @@ class NoteCreator extends Component<RouteComponentProps & Props, State> {
                                 </div>
                             </div>
                             {this.state.imageUrl &&
-                            <div className="mb-32">
-                                <span className="label-text mb-16">Изображение</span>
-                                {this.state.linkWithoutImage &&
-                                    <span className="sub-header">
-                                        Мы не нашли изображение на странице по ссылке и поэтому подобрали рандомную из интернета,
-                                        чтобы вам было удобнее работать со списком ссылок. Если она не подходит к этой статье -
-                                        можно <a className="link" onClick={this.updateImageUrl}>загрузить другую</a>.
-                                    </span>
-                                }
-                                <div className="image-wrapper">
-                                    {this.state.updatingRandomImage &&
-                                        <div className="image-spinner">
-                                            <Spinner size="md"/>
+                                <div className="mb-32">
+                                    <span className="label-text mb-16">Изображение</span>
+                                    {this.state.linkWithoutImage &&
+                                        <span className="sub-header">
+                                            Мы не нашли изображение на странице по ссылке и поэтому предлагаем выбрать одну
+                                            из картинок для этой ссылки, чтобы вам было удобнее работать со списком ссылок.
+                                        </span>
+                                    }
+                                    <div className="image-wrapper">
+                                        <img src={this.state.imageUrl} alt=""/>
+                                    </div>
+                                    {this.state.linkWithoutImage &&
+                                        <div className="grid mt-16">
+                                            {this.state.randomImageUrls.map((imageUrl: string) =>
+                                                <div key={imageUrl} className="col-4">
+                                                    <div className={'image-wrapper image-random' + (this.state.imageUrl === imageUrl ? ' active' : '')}
+                                                         onClick={() => this.setState({imageUrl: imageUrl})}>
+                                                        <img src={imageUrl} alt=""/>
+                                                    </div>
+                                                </div>
+                                            )}
                                         </div>
                                     }
-                                    <img src={this.state.imageUrl} onLoad={() => this.setState({updatingRandomImage: false})} alt=""/>
                                 </div>
-                            </div>
                             }
                         </div>
                         <div className="col-4">
