@@ -1,3 +1,4 @@
+import {createStore} from 'redux';
 import NoteModel from '../models/note.model';
 
 export enum actionTypes {
@@ -5,7 +6,7 @@ export enum actionTypes {
     change = 'change'
 }
 
-export const createNoteReducer = (state: NoteModel = new NoteModel(), action: {type: actionTypes, data: NoteModel}) => {
+const createNoteReducer = (state: NoteModel = new NoteModel(), action: {type: actionTypes, data: NoteModel}) => {
     switch(action.type) {
         case actionTypes.change:
             return Object.assign(state, action.data);
@@ -15,3 +16,5 @@ export const createNoteReducer = (state: NoteModel = new NoteModel(), action: {t
             return state;
     }
 };
+
+export const createNoteStore = createStore(createNoteReducer);

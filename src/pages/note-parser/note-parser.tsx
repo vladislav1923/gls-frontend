@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {withRouter} from 'react-router-dom';
 import {connect} from 'react-redux';
 import {RouteComponentProps} from 'react-router';
-import {actionTypes} from '../../store/create-note.reducer';
+import {actionTypes} from '../../store/create-note.store';
 import {NoteService} from '../../services/note.service';
 import './note-parser.less';
 import Button from '../../components/button/button';
@@ -71,12 +71,12 @@ class NoteParser extends Component<RouteComponentProps & Props, State> {
             <div>
                 <div className="step">
                     <h2>Шаг 1 / Введите ссылку</h2>
-                    <span className="sub-header">
+                    <span className="sub-header mb-32">
                         Ссылка должна вести на статью, которую вы хотите добавить.
                         Пример ссылки: https://habr.com/ru/post/437108/
                     </span>
-                    <div className="grid">
-                        <div className="col-8_sm-12">
+                    <div className="grid-spaceBetween">
+                        <div className="col-7_sm-12">
                             <label>
                                 <input type="text" value={this.state.link}
                                        onFocus={() => this.setState({errorLinkMessage: ''})}
@@ -88,7 +88,7 @@ class NoteParser extends Component<RouteComponentProps & Props, State> {
                         <div className="col-4_sm-12">
                             <Button process={this.state.linkParseProgress} color="white" size="lg"
                                     fullWidth={true} onClick={this.goToNextStep}>
-                                <span className="add-link-button-text">Следующий шаг</span>
+                                <span className="add-link-button-text">Сохранить</span>
                             </Button>
                         </div>
                     </div>

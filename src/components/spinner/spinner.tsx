@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import './spinner.less';
 
 type Props = {
-    size: 'sm' | 'md'
+    size: 'sm' | 'md' | 'lg'
 }
 
 class Spinner extends Component<Props> {

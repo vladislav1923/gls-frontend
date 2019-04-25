@@ -1,0 +1,121 @@
+@import '../../styles/vars';
+
+.select-wrapper {
+  position: relative;
+
+  /* mobile native version */
+  select {
+    position: relative;
+    width: 100%;
+    font-family: @fontRegular;
+    font-size: 16px;
+    color: @blackColor;
+    padding: 14px 0;
+    outline: none;
+    background-color: @grayColor;
+    border: none;
+    appearance: none;
+    border-bottom: 2px solid @lightBlueColor;
+    cursor: pointer;
+
+    &:hover,
+    &:focus {
+      border-color: @darkBlueColor;
+    }
+
+    &:focus + .arrow {
+      transform: rotate(180deg);
+    }
+
+    option {
+      font-size: 18px;
+    }
+  }
+  /* mobile native version */
+
+  /* desktop custom version */
+
+  .select {
+    position: relative;
+    width: 100%;
+    font-family: @fontRegular;
+    font-size: 16px;
+    color: @blackColor;
+    padding: 14px 0;
+    background-color: @grayColor;
+    border-bottom: 2px solid @lightBlueColor;
+    cursor: pointer;
+
+    &:hover {
+      border-color: @darkBlueColor;
+    }
+
+    .value {
+      white-space: nowrap;
+      padding-right: 55px;
+      text-overflow: ellipsis;
+      overflow: hidden;
+    }
+
+    .list {
+      position: absolute;
+      top: 46px;
+      width: 100%;
+      max-height: 0;
+      list-style: none;
+      overflow-x: hidden;
+      transition: max-height .2s linear;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
+      z-index: 60;
+
+      &.active {
+        max-height: 300px;
+      }
+
+      .option {
+        font-size: 18px;
+        color: @blackColor;
+        padding: 14px 12px;
+        background-color: @grayColor;
+        border-bottom: 2px solid @darkBlueColor;
+        cursor: pointer;
+
+        &:hover {
+          color: @whiteColor;
+          background-color: @darkBlueColor;
+        }
+      }
+    }
+
+    .back-plate {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 50;
+
+      &.active {
+        display: block;
+      }
+    }
+  }
+
+  /* desktop custom version */
+
+  .arrow {
+    width: 20px;
+    height: 20px;
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    pointer-events: none;
+    transition: transform .3s linear;
+    cursor: pointer;
+
+    &.active {
+      transform: rotate(180deg);
+    }
+  }
+}

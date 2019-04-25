@@ -8,7 +8,7 @@ import './note-creator.less';
 import Button from "../../components/button/button";
 import Tag from "../../components/tag/tag";
 import NoteModel from "../../models/note.model";
-import {actionTypes} from "../../store/create-note.reducer";
+import {actionTypes} from "../../store/create-note.store";
 import {removeLineTranslationSymbols, stringArrayToLowerCase} from '../../helpers/tools';
 
 type Props = {
@@ -122,10 +122,10 @@ class NoteCreator extends Component<RouteComponentProps & Props, State> {
             <div>
                 <div id="step" className="step">
                     <h2>Шаг 2 / Добавление описания ссылки</h2>
-                    <span className="sub-header">
+                    <span className="sub-header mb-32">
                         Проверьте правильность описания страницы, на которую введет ссылка.
                         При необходимости исправьте описание и/или добавьте ссылку в соответствующую группу.
-                        По окончанию нажмите кнопку &laquo;Следующий шаг&raquo;    для перехода к выбору группы или
+                        По окончанию нажмите кнопку &laquo;Следующий шаг&raquo; для перехода к выбору группы или
                         &laquo;Назад&raquo; для изменения ссылки.
                     </span>
                     <div className="grid grid-spaceBetween">
@@ -178,7 +178,7 @@ class NoteCreator extends Component<RouteComponentProps & Props, State> {
                                 <div className="mb-32">
                                     <span className="label-text mb-16">Изображение</span>
                                     {this.state.linkWithoutImage &&
-                                        <span className="sub-header">
+                                        <span className="sub-header mb-32">
                                             Мы не нашли изображение на странице по ссылке и поэтому предлагаем выбрать одну
                                             из картинок для этой ссылки, чтобы вам было удобнее работать со списком ссылок.
                                         </span>
