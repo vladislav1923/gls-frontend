@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {withRouter} from 'react-router-dom';
 import {RouteComponentProps} from 'react-router';
 import {connect} from 'react-redux';
-import {actionTypes} from '../../store/create-note.store';
+import {ActionTypes} from '../../enums/action-types.enum';
 import './note-group.less';
 import Button from '../../components/button/button';
 import Select from '../../components/select/select';
@@ -155,9 +155,9 @@ const stateToProps = (state: NoteModel) => {
     }
 };
 
-const dispatchToProps = (dispatch: (data: { type: actionTypes, data: NoteModel }) => void) => {
+const dispatchToProps = (dispatch: (data: { type: ActionTypes, data: NoteModel }) => void) => {
     return {
-        changeCreatingNote: (data: NoteModel) => dispatch({type: actionTypes.change, data}),
+        changeCreatingNote: (data: NoteModel) => dispatch({type: ActionTypes.change, data}),
     }
 };
 

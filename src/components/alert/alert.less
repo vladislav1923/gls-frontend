@@ -1,0 +1,60 @@
+@import '../../styles/vars';
+
+.alert {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  color: @whiteColor;
+  min-height: 80px;
+  padding: 16px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
+  opacity: 0;
+  visibility: hidden;
+  transition: all .3s linear;
+
+  &-icon {
+    margin-right: 16px;
+  }
+
+  &-text{
+    display: flex;
+    flex-direction: column;
+  }
+
+  &-title {
+    font-family: @fontBold;
+    font-size: 18px;
+  }
+
+  &-subtitle {
+    font-family: @fontRegular;
+    font-size: 16px;
+  }
+
+  .close-button {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    cursor: pointer;
+  }
+
+  &.show {
+    visibility: visible;
+    opacity: 1;
+  }
+
+  &.success {
+    background-color: @successColor;
+  }
+
+  &.warning {
+    background-color: @warningColor;
+  }
+
+  &.error {
+    background-color: @errorColor
+  }
+}
+

@@ -2,11 +2,14 @@ import React, {Component} from 'react';
 import {withRouter} from 'react-router-dom';
 import {connect} from 'react-redux';
 import {RouteComponentProps} from 'react-router';
-import {actionTypes} from '../../store/create-note.store';
+import {ActionTypes} from '../../enums/action-types.enum';
 import {NoteService} from '../../services/note.service';
 import './note-parser.less';
 import Button from '../../components/button/button';
 import NoteModel from '../../models/note.model';
+import Alert from "../../components/alert/alert";
+import {AlertModel} from "../../models/alert.model";
+import {AlertTypes} from "../../enums/alert-types.enum";
 
 type Props = {
     creatingNote: NoteModel,
@@ -15,7 +18,8 @@ type Props = {
 
 type State = {
     link: string,
-    errorLinkMessage: string | null,
+    errorLinkMessage: string,
+    errorLinkAlert: AlertModel | null,
     linkParseProgress: boolean
 }
 
@@ -28,7 +32,8 @@ class NoteParser extends Component<RouteComponentProps & Props, State> {
         super(props);
         this.state = {
             link: this.props.creatingNote.url || '',
-            errorLinkMessage: null,
+            errorLinkMessage: '',
+            errorLinkAlert: null,
             linkParseProgress: false
         };
 
@@ -46,20 +51,38 @@ class NoteParser extends Component<RouteComponentProps & Props, State> {
                 this.props.changeCreatingNote(data);
                 this.props.history.push('/create');
             } else {
-                this.setState({errorLinkMessage: 'Проблема с сервером. Попробуйте чуть позже.'});
+                this.setState({
+                    errorLinkMessage: 'Проблема с сервером. Попробуйте чуть позже.',
+                    errorLinkAlert: new AlertModel(
+                        AlertTypes.error,
+                        'Проблема с сервером',
+                        'Попробуйте чуть позже.')
+                });
             }
         }
     };
 
     private validateLink(): boolean {
         if (this.state.link.length === 0) {
-            this.setState({errorLinkMessage: 'Не вижу ссылки'});
+            this.setState({
+                errorLinkMessage: 'Не вижу ссылки',
+                errorLinkAlert: new AlertModel(
+                    AlertTypes.error,
+                    'Не вижу ссылки.',
+                    'Введите ссылку в поле.')
+            });
             return false;
         }
 
         const regExp = new RegExp(this.linkRegexp);
         if (!this.state.link.match(regExp)) {
-            this.setState({errorLinkMessage: 'Не похоже на ссылку'});
+            this.setState({
+                errorLinkMessage: 'Не похоже на ссылку',
+                errorLinkAlert: new AlertModel(
+                    AlertTypes.error,
+                    'Не похоже на ссылку.',
+                    'Проверьте ссылку на ошибки или укажите другую.')
+            });
             return false;
         }
 
@@ -69,6 +92,8 @@ class NoteParser extends Component<RouteComponentProps & Props, State> {
     render() {
         return (
             <div>
+                <Alert isOpen={!!this.state.errorLinkAlert} data={this.state.errorLinkAlert}
+                       onClose={() => this.setState({errorLinkAlert: null})} />
                 <div className="step">
                     <h2>Шаг 1 / Введите ссылку</h2>
                     <span className="sub-header mb-32">
@@ -79,7 +104,7 @@ class NoteParser extends Component<RouteComponentProps & Props, State> {
                         <div className="col-7_sm-12">
                             <label>
                                 <input type="text" value={this.state.link}
-                                       onFocus={() => this.setState({errorLinkMessage: ''})}
+                                       onFocus={() => this.setState({errorLinkMessage: '', errorLinkAlert: null})}
                                        onChange={(e) => this.setState({link: e.target.value})}
                                        placeholder="Введите ссылку"/>
                                 <div className="error-label mt-16">{this.state.errorLinkMessage}</div>
@@ -104,9 +129,9 @@ const stateToProps = (state: NoteModel) => {
     }
 };
 
-const dispatchToProps = (dispatch: (data: {type: actionTypes, data: NoteModel}) => void) => {
+const dispatchToProps = (dispatch: (data: {type: ActionTypes, data: NoteModel}) => void) => {
     return {
-        changeCreatingNote: (data: NoteModel) => dispatch({type: actionTypes.change, data}),
+        changeCreatingNote: (data: NoteModel) => dispatch({type: ActionTypes.change, data}),
     }
 };
 

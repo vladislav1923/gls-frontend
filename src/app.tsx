@@ -3,15 +3,15 @@ import {BrowserRouter as Router, Redirect, Route, Switch} from 'react-router-dom
 import {Provider} from 'react-redux';
 import {createNoteStore} from './store/create-note.store'
 import {library} from '@fortawesome/fontawesome-svg-core'
-import {faLink, faUserCircle, faPlus, faTimes,  faChevronDown} from '@fortawesome/free-solid-svg-icons'
+import {faLink, faUserCircle, faPlus, faTimes, faChevronDown, faFrown, faMeh, faSmile} from '@fortawesome/free-solid-svg-icons'
 import {faGithub} from '@fortawesome/free-brands-svg-icons'
-import Shell from "./pages/shell/shell";
+import Shell from './pages/shell/shell';
 import NotesList from './pages/notes-list/notes-list';
 import NoteParser from './pages/note-parser/note-parser';
 import NoteCreator from './pages/note-creator/note-creator';
 import NoteGroup from './pages/note-group/note-group';
 
-library.add(faLink, faUserCircle, faPlus, faTimes, faChevronDown, faGithub);
+library.add(faLink, faUserCircle, faPlus, faTimes, faChevronDown, faFrown, faMeh, faSmile, faGithub);
 
 class App extends Component {
     render() {

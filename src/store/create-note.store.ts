@@ -1,16 +1,12 @@
 import {createStore} from 'redux';
+import {ActionTypes} from '../enums/action-types.enum';
 import NoteModel from '../models/note.model';
 
-export enum actionTypes {
-    clear = 'clear',
-    change = 'change'
-}
-
-const createNoteReducer = (state: NoteModel = new NoteModel(), action: {type: actionTypes, data: NoteModel}) => {
+const createNoteReducer = (state: NoteModel = new NoteModel(), action: {type: ActionTypes, data: NoteModel}) => {
     switch(action.type) {
-        case actionTypes.change:
+        case ActionTypes.change:
             return Object.assign(state, action.data);
-        case actionTypes.clear:
+        case ActionTypes.clear:
             return Object.assign(state, new NoteModel());
         default:
             return state;

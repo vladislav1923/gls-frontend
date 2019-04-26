@@ -1,14 +1,14 @@
 import React, {Component} from 'react';
 import {withRouter} from 'react-router-dom';
-import {RouteComponentProps} from "react-router";
-import {connect} from "react-redux";
+import {RouteComponentProps} from 'react-router';
+import {connect} from 'react-redux';
 import {UnsplashService} from '../../services/unsplash.service';
 import {ScrollHandler} from '../../helpers/scroll-handler';
 import './note-creator.less';
-import Button from "../../components/button/button";
-import Tag from "../../components/tag/tag";
-import NoteModel from "../../models/note.model";
-import {actionTypes} from "../../store/create-note.store";
+import Button from '../../components/button/button';
+import Tag from '../../components/tag/tag';
+import NoteModel from '../../models/note.model';
+import {ActionTypes} from '../../enums/action-types.enum';
 import {removeLineTranslationSymbols, stringArrayToLowerCase} from '../../helpers/tools';
 
 type Props = {
@@ -231,9 +231,9 @@ const stateToProps = (state: NoteModel) => {
     }
 };
 
-const dispatchToProps = (dispatch: (data: { type: actionTypes, data: NoteModel }) => void) => {
+const dispatchToProps = (dispatch: (data: { type: ActionTypes, data: NoteModel }) => void) => {
     return {
-        changeCreatingNote: (data: NoteModel) => dispatch({type: actionTypes.change, data}),
+        changeCreatingNote: (data: NoteModel) => dispatch({type: ActionTypes.change, data}),
     }
 };
 
