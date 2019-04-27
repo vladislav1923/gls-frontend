@@ -10,6 +10,9 @@ import Tag from '../../components/tag/tag';
 import NoteModel from '../../models/note.model';
 import {ActionTypes} from '../../enums/action-types.enum';
 import {removeLineTranslationSymbols, stringArrayToLowerCase} from '../../helpers/tools';
+import {AlertModel} from "../../models/alert.model";
+import {AlertTypes} from "../../enums/alert-types.enum";
+import Alert from "../../components/alert/alert";
 
 type Props = {
     creatingNote: NoteModel,
@@ -22,6 +25,7 @@ type State = {
     keywords: string[],
     imageUrl: string,
     errorTitleMessage: string,
+    errorTitleAlert: AlertModel | null,
     addingKeyword: string,
     linkWithoutImage: boolean,
     randomImageUrls: string[]
@@ -43,6 +47,7 @@ class NoteCreator extends Component<RouteComponentProps & Props, State> {
             keywords: stringArrayToLowerCase(this.props.creatingNote.keywords),
             imageUrl: '',
             errorTitleMessage: '',
+            errorTitleAlert: null,
             addingKeyword: '',
             linkWithoutImage: false,
             randomImageUrls: []
@@ -109,7 +114,13 @@ class NoteCreator extends Component<RouteComponentProps & Props, State> {
 
     private validateLink(): boolean {
         if (this.state.title.length === 0) {
-            this.setState({errorTitleMessage: 'Давай заголовок добавим'});
+            this.setState({
+                errorTitleMessage: 'Давайте заголовок добавим',
+                errorTitleAlert: new AlertModel(
+                    AlertTypes.error,
+                    'Давайте заголовок добавим',
+                    'Он просто необходим.')
+            });
             ScrollHandler.scrollToId('step');
             return false;
         }
@@ -120,6 +131,8 @@ class NoteCreator extends Component<RouteComponentProps & Props, State> {
     render() {
         return (
             <div>
+                <Alert isOpen={!!this.state.errorTitleAlert} data={this.state.errorTitleAlert}
+                       onClose={() => this.setState({errorTitleAlert: null})} />
                 <div id="step" className="step">
                     <h2>Шаг 2 / Добавление описания ссылки</h2>
                     <span className="sub-header mb-32">

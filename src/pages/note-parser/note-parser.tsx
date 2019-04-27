@@ -7,9 +7,10 @@ import {NoteService} from '../../services/note.service';
 import './note-parser.less';
 import Button from '../../components/button/button';
 import NoteModel from '../../models/note.model';
-import Alert from "../../components/alert/alert";
-import {AlertModel} from "../../models/alert.model";
-import {AlertTypes} from "../../enums/alert-types.enum";
+import Alert from '../../components/alert/alert';
+import {AlertModel} from '../../models/alert.model';
+import {AlertTypes} from '../../enums/alert-types.enum';
+import {removeSpaces} from '../../helpers/tools';
 
 type Props = {
     creatingNote: NoteModel,
@@ -44,7 +45,7 @@ class NoteParser extends Component<RouteComponentProps & Props, State> {
         if (!this.state.linkParseProgress && this.validateLink()) {
             this.setState({linkParseProgress: true});
 
-            const response = await this.noteService.parseUrl(this.state.link);
+            const response = await this.noteService.parseUrl(removeSpaces(this.state.link));
             if (response.result) {
                 const data = response.data as NoteModel;
                 data.url = this.state.link;
@@ -104,7 +105,7 @@ class NoteParser extends Component<RouteComponentProps & Props, State> {
                         <div className="col-7_sm-12">
                             <label>
                                 <input type="text" value={this.state.link}
-                                       onFocus={() => this.setState({errorLinkMessage: '', errorLinkAlert: null})}
+                                       onFocus={() => this.setState({errorLinkMessage: ''})}
                                        onChange={(e) => this.setState({link: e.target.value})}
                                        placeholder="Введите ссылку"/>
                                 <div className="error-label mt-16">{this.state.errorLinkMessage}</div>

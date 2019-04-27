@@ -7,12 +7,11 @@
   right: 0;
   display: flex;
   color: @whiteColor;
-  min-height: 80px;
+  height: 80px;
+  transform: translateY(-80px);
   padding: 16px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
-  opacity: 0;
-  visibility: hidden;
-  transition: all .3s linear;
+  transition: transform .3s linear;
 
   &-icon {
     margin-right: 16px;
@@ -21,16 +20,20 @@
   &-text{
     display: flex;
     flex-direction: column;
+    justify-content: center;
+    min-width: 300px;
   }
 
   &-title {
     font-family: @fontBold;
     font-size: 18px;
+    line-height: 18px;
   }
 
   &-subtitle {
     font-family: @fontRegular;
     font-size: 16px;
+    line-height: 16px;
   }
 
   .close-button {
@@ -41,8 +44,7 @@
   }
 
   &.show {
-    visibility: visible;
-    opacity: 1;
+    transform: translateY(0);
   }
 
   &.success {
