@@ -8,10 +8,10 @@ import './note-creator.less';
 import Button from '../../components/button/button';
 import Tag from '../../components/tag/tag';
 import NoteModel from '../../models/note.model';
-import {ActionTypes} from '../../enums/action-types.enum';
+import {ActionTypesEnum} from '../../enums/action-types.enum';
 import {removeLineTranslationSymbols, stringArrayToLowerCase} from '../../helpers/tools';
 import {AlertModel} from "../../models/alert.model";
-import {AlertTypes} from "../../enums/alert-types.enum";
+import {AlertTypesEnum} from "../../enums/alert-types.enum";
 import Alert from "../../components/alert/alert";
 import {NoteService} from "../../services/note.service";
 
@@ -116,7 +116,7 @@ class NoteCreator extends Component<RouteComponentProps & Props, State> {
             this.setState({
                 errorTitleMessage: 'Давайте заголовок добавим',
                 errorTitleAlert: new AlertModel(
-                    AlertTypes.error,
+                    AlertTypesEnum.error,
                     'Давайте заголовок добавим',
                     'Он просто необходим.')
             });
@@ -143,7 +143,7 @@ class NoteCreator extends Component<RouteComponentProps & Props, State> {
             this.setState({
                 errorTitleMessage: 'Проблема с сервером. Попробуйте чуть позже.',
                 errorTitleAlert: new AlertModel(
-                    AlertTypes.error,
+                    AlertTypesEnum.error,
                     'Проблема с сервером',
                     'Попробуйте чуть позже.')
             });
@@ -265,9 +265,9 @@ const stateToProps = (state: NoteModel) => {
     }
 };
 
-const dispatchToProps = (dispatch: (data: { type: ActionTypes, data: NoteModel }) => void) => {
+const dispatchToProps = (dispatch: (data: { type: ActionTypesEnum, data: NoteModel }) => void) => {
     return {
-        changeCreatingNote: (data: NoteModel) => dispatch({type: ActionTypes.change, data})
+        changeCreatingNote: (data: NoteModel) => dispatch({type: ActionTypesEnum.change, data})
     }
 };
 

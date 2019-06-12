@@ -2,14 +2,14 @@ import React, {Component} from 'react';
 import {withRouter} from 'react-router-dom';
 import {connect} from 'react-redux';
 import {RouteComponentProps} from 'react-router';
-import {ActionTypes} from '../../enums/action-types.enum';
+import {ActionTypesEnum} from '../../enums/action-types.enum';
 import {NoteService} from '../../services/note.service';
 import './note-parser.less';
 import Button from '../../components/button/button';
 import NoteModel from '../../models/note.model';
 import Alert from '../../components/alert/alert';
 import {AlertModel} from '../../models/alert.model';
-import {AlertTypes} from '../../enums/alert-types.enum';
+import {AlertTypesEnum} from '../../enums/alert-types.enum';
 import {removeSpaces} from '../../helpers/tools';
 
 type Props = {
@@ -55,7 +55,7 @@ class NoteParser extends Component<RouteComponentProps & Props, State> {
                 this.setState({
                     errorLinkMessage: 'Проблема с сервером. Попробуйте чуть позже.',
                     errorLinkAlert: new AlertModel(
-                        AlertTypes.error,
+                        AlertTypesEnum.error,
                         'Проблема с сервером',
                         'Попробуйте чуть позже.')
                 });
@@ -68,7 +68,7 @@ class NoteParser extends Component<RouteComponentProps & Props, State> {
             this.setState({
                 errorLinkMessage: 'Не вижу ссылки',
                 errorLinkAlert: new AlertModel(
-                    AlertTypes.error,
+                    AlertTypesEnum.error,
                     'Не вижу ссылки.',
                     'Введите ссылку в поле.')
             });
@@ -80,7 +80,7 @@ class NoteParser extends Component<RouteComponentProps & Props, State> {
             this.setState({
                 errorLinkMessage: 'Не похоже на ссылку',
                 errorLinkAlert: new AlertModel(
-                    AlertTypes.error,
+                    AlertTypesEnum.error,
                     'Не похоже на ссылку.',
                     'Проверьте ссылку на ошибки или укажите другую.')
             });
@@ -130,9 +130,9 @@ const stateToProps = (state: NoteModel) => {
     }
 };
 
-const dispatchToProps = (dispatch: (data: {type: ActionTypes, data: NoteModel}) => void) => {
+const dispatchToProps = (dispatch: (data: {type: ActionTypesEnum, data: NoteModel}) => void) => {
     return {
-        changeCreatingNote: (data: NoteModel) => dispatch({type: ActionTypes.change, data}),
+        changeCreatingNote: (data: NoteModel) => dispatch({type: ActionTypesEnum.change, data}),
     }
 };
 

@@ -1,4 +1,3 @@
-export enum ActionTypes {
-    clear = 'clear',
+export enum ActionTypesEnum {
     change = 'change'
 }

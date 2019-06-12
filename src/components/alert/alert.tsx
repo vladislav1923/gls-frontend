@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import './alert.less';
 // import {isMobile} from 'react-device-detect';
 import {AlertModel} from '../../models/alert.model';
-import {AlertTypes} from '../../enums/alert-types.enum';
+import {AlertTypesEnum} from '../../enums/alert-types.enum';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 
 type Props = {
@@ -12,7 +12,7 @@ type Props = {
 }
 
 type State = {
-    alertType: AlertTypes | null,
+    alertType: AlertTypesEnum | null,
     timerId: number | null
 }
 
@@ -52,9 +52,9 @@ class Alert extends Component<Props, State> {
         return (
             <div className={'alert' + (this.props.isOpen ? ' show' : '') + (this.state.alertType ? ` ${this.state.alertType}` : '')}>
                 <div className="alert-icon">
-                    {this.state.alertType === AlertTypes.error && <FontAwesomeIcon icon="frown" size="3x" />}
-                    {this.state.alertType === AlertTypes.warning && <FontAwesomeIcon icon="meh" size="3x" />}
-                    {this.state.alertType === AlertTypes.success && <FontAwesomeIcon icon="smile" size="3x" />}
+                    {this.state.alertType === AlertTypesEnum.error && <FontAwesomeIcon icon="frown" size="3x" />}
+                    {this.state.alertType === AlertTypesEnum.warning && <FontAwesomeIcon icon="meh" size="3x" />}
+                    {this.state.alertType === AlertTypesEnum.success && <FontAwesomeIcon icon="smile" size="3x" />}
                 </div>
                 <div className="alert-text">
                     <span className="alert-title mb-8">{this.props.data && this.props.data.title}</span>
