@@ -6,8 +6,6 @@ const createNoteReducer = (state: NoteModel = new NoteModel(), action: {type: Ac
     switch(action.type) {
         case ActionTypes.change:
             return Object.assign(state, action.data);
-        case ActionTypes.clear:
-            return Object.assign(state, new NoteModel());
         default:
             return state;
     }

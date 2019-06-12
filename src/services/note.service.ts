@@ -14,5 +14,9 @@ export class NoteService extends BaseService {
         return await this.get(`parse?url=${encodedUrl}`, NoteModel);
     }
 
+    public async createNote(data: NoteModel): Promise<ResponseModel<NoteModel>> {
+        return await this.post(`notes`, data, NoteModel);
+    }
+
 }
 

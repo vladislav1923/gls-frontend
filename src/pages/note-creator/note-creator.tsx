@@ -13,6 +13,7 @@ import {removeLineTranslationSymbols, stringArrayToLowerCase} from '../../helper
 import {AlertModel} from "../../models/alert.model";
 import {AlertTypes} from "../../enums/alert-types.enum";
 import Alert from "../../components/alert/alert";
+import {NoteService} from "../../services/note.service";
 
 type Props = {
     creatingNote: NoteModel,
@@ -28,12 +29,14 @@ type State = {
     errorTitleAlert: AlertModel | null,
     addingKeyword: string,
     linkWithoutImage: boolean,
-    randomImageUrls: string[]
+    randomImageUrls: string[],
+    createNoteProgress: boolean
 }
 
 class NoteCreator extends Component<RouteComponentProps & Props, State> {
 
     private unsplashService: UnsplashService;
+    private noteService: NoteService;
 
     constructor(props: RouteComponentProps & Props) {
         super(props);
@@ -50,10 +53,12 @@ class NoteCreator extends Component<RouteComponentProps & Props, State> {
             errorTitleAlert: null,
             addingKeyword: '',
             linkWithoutImage: false,
-            randomImageUrls: []
+            randomImageUrls: [],
+            createNoteProgress: false
         };
 
         this.unsplashService = new UnsplashService();
+        this.noteService = new NoteService();
     }
 
     public async componentDidMount() {
@@ -70,20 +75,14 @@ class NoteCreator extends Component<RouteComponentProps & Props, State> {
         }
     };
 
-    public deleteTag = (value: string): void => {
+    public deleteKeyword = (value: string): void => {
         const updatedKeywords = this.state.keywords.filter((item: string) => item !== value);
         this.setState({keywords: updatedKeywords});
     };
 
-    public goToNextStep = (): void => {
+    public goToNextStep = async (): Promise<void> => {
         if (this.validateLink()) {
-            const data = this.props.creatingNote;
-            data.title = this.state.title;
-            data.description = this.state.description;
-            data.keywords = this.state.keywords;
-            data.imageUrl = this.state.imageUrl;
-            this.props.changeCreatingNote(data);
-            this.props.history.push('/group');
+            await this.createNote();
         }
     };
 
@@ -128,6 +127,29 @@ class NoteCreator extends Component<RouteComponentProps & Props, State> {
         return true;
     }
 
+    private createNote = async (): Promise<void> => {
+        this.setState({createNoteProgress: true});
+        const data = this.props.creatingNote;
+        data.title = this.state.title;
+        data.description = this.state.description;
+        data.keywords = this.state.keywords;
+        data.imageUrl = this.state.imageUrl;
+        const response = await this.noteService.createNote(data);
+        this.setState({createNoteProgress: false});
+        if (response.result) {
+            this.props.changeCreatingNote(new NoteModel());
+            this.props.history.push('/');
+        } else {
+            this.setState({
+                errorTitleMessage: 'Проблема с сервером. Попробуйте чуть позже.',
+                errorTitleAlert: new AlertModel(
+                    AlertTypes.error,
+                    'Проблема с сервером',
+                    'Попробуйте чуть позже.')
+            });
+        }
+    };
+
     render() {
         return (
             <div>
@@ -137,9 +159,8 @@ class NoteCreator extends Component<RouteComponentProps & Props, State> {
                     <h2>Шаг 2 / Добавление описания ссылки</h2>
                     <span className="sub-header mb-32">
                         Проверьте правильность описания страницы, на которую введет ссылка.
-                        При необходимости исправьте описание и/или добавьте ссылку в соответствующую группу.
-                        По окончанию нажмите кнопку &laquo;Следующий шаг&raquo; для перехода к выбору группы или
-                        &laquo;Назад&raquo; для изменения ссылки.
+                        При необходимости исправьте описание и нажмите кнопку &laquo;Сохранить&raquo;.
+                        Нажмите &laquo;Назад&raquo; для изменения ссылки.
                     </span>
                     <div className="grid grid-spaceBetween">
                         <div className="col-8_sm-12">
@@ -169,7 +190,7 @@ class NoteCreator extends Component<RouteComponentProps & Props, State> {
                                     <div className="col-12">
                                         {this.state.keywords.map((keyword: string) =>
                                             <Tag key={keyword.toString()} value={keyword} canDelete={true}
-                                                 onDelete={(value) => this.deleteTag(value)}/>
+                                                 onDelete={(value) => this.deleteKeyword(value)}/>
                                         )}
                                     </div>
                                     <div className="col-6_sm-12">
@@ -226,9 +247,9 @@ class NoteCreator extends Component<RouteComponentProps & Props, State> {
                             </Button>
                         </div>
                         <div className="col-4_sm-12">
-                            <Button color="white" size="lg" fullWidth={true}
+                            <Button process={this.state.createNoteProgress} color="white" size="lg" fullWidth={true}
                                     onClick={this.goToNextStep}>
-                                <span className="add-link-button-text">Следующий шаг</span>
+                                <span className="add-link-button-text">Сохранить ссылку</span>
                             </Button>
                         </div>
                     </div>
@@ -246,7 +267,7 @@ const stateToProps = (state: NoteModel) => {
 
 const dispatchToProps = (dispatch: (data: { type: ActionTypes, data: NoteModel }) => void) => {
     return {
-        changeCreatingNote: (data: NoteModel) => dispatch({type: ActionTypes.change, data}),
+        changeCreatingNote: (data: NoteModel) => dispatch({type: ActionTypes.change, data})
     }
 };
 
