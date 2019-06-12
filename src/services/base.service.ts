@@ -64,8 +64,6 @@ export class BaseService {
             let result = false;
             let data: T | null = null;
 
-            console.log(response)
-
             if (response.ok) {
                 data =  new model().fromJSON(await response.json());
                 result = true;

@@ -3,17 +3,18 @@ import {withRouter} from 'react-router-dom';
 import {RouteComponentProps} from 'react-router';
 import {connect} from 'react-redux';
 import {UnsplashService} from '../../services/unsplash.service';
+import {NoteService} from '../../services/note.service';
+import {EventService} from '../../services/event.service';
 import {ScrollHandler} from '../../helpers/scroll-handler';
 import './note-creator.less';
 import Button from '../../components/button/button';
 import Tag from '../../components/tag/tag';
 import NoteModel from '../../models/note.model';
 import {ActionTypesEnum} from '../../enums/action-types.enum';
+import {AlertModel} from '../../models/alert.model';
+import {AlertTypesEnum} from '../../enums/alert-types.enum';
+import {EventTypesEnum} from '../../enums/event-types.enum';
 import {removeLineTranslationSymbols, stringArrayToLowerCase} from '../../helpers/tools';
-import {AlertModel} from "../../models/alert.model";
-import {AlertTypesEnum} from "../../enums/alert-types.enum";
-import Alert from "../../components/alert/alert";
-import {NoteService} from "../../services/note.service";
 
 type Props = {
     creatingNote: NoteModel,
@@ -26,7 +27,6 @@ type State = {
     keywords: string[],
     imageUrl: string,
     errorTitleMessage: string,
-    errorTitleAlert: AlertModel | null,
     addingKeyword: string,
     linkWithoutImage: boolean,
     randomImageUrls: string[],
@@ -50,7 +50,6 @@ class NoteCreator extends Component<RouteComponentProps & Props, State> {
             keywords: stringArrayToLowerCase(this.props.creatingNote.keywords),
             imageUrl: '',
             errorTitleMessage: '',
-            errorTitleAlert: null,
             addingKeyword: '',
             linkWithoutImage: false,
             randomImageUrls: [],
@@ -113,13 +112,11 @@ class NoteCreator extends Component<RouteComponentProps & Props, State> {
 
     private validateLink(): boolean {
         if (this.state.title.length === 0) {
-            this.setState({
-                errorTitleMessage: 'Давайте заголовок добавим',
-                errorTitleAlert: new AlertModel(
-                    AlertTypesEnum.error,
-                    'Давайте заголовок добавим',
-                    'Он просто необходим.')
-            });
+            this.setState({errorTitleMessage: 'Давайте заголовок добавим'});
+            EventService.dispatchEvent(EventTypesEnum.alert, new AlertModel(
+                AlertTypesEnum.error,
+                'Давайте заголовок добавим',
+                'Он просто необходим.'));
             ScrollHandler.scrollToId('step');
             return false;
         }
@@ -137,24 +134,24 @@ class NoteCreator extends Component<RouteComponentProps & Props, State> {
         const response = await this.noteService.createNote(data);
         this.setState({createNoteProgress: false});
         if (response.result) {
+            EventService.dispatchEvent(EventTypesEnum.alert, new AlertModel(
+                AlertTypesEnum.success,
+                'Поздравляем!',
+                'Ссылка добавлена.'));
             this.props.changeCreatingNote(new NoteModel());
             this.props.history.push('/');
         } else {
-            this.setState({
-                errorTitleMessage: 'Проблема с сервером. Попробуйте чуть позже.',
-                errorTitleAlert: new AlertModel(
-                    AlertTypesEnum.error,
-                    'Проблема с сервером',
-                    'Попробуйте чуть позже.')
-            });
+            this.setState({errorTitleMessage: 'Проблема с сервером. Попробуйте чуть позже.'});
+            EventService.dispatchEvent(EventTypesEnum.alert, new AlertModel(
+                AlertTypesEnum.error,
+                'Проблема с сервером',
+                'Попробуйте чуть позже.'));
         }
     };
 
     render() {
         return (
             <div>
-                <Alert isOpen={!!this.state.errorTitleAlert} data={this.state.errorTitleAlert}
-                       onClose={() => this.setState({errorTitleAlert: null})} />
                 <div id="step" className="step">
                     <h2>Шаг 2 / Добавление описания ссылки</h2>
                     <span className="sub-header mb-32">

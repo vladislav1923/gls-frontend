@@ -4,12 +4,13 @@ import {connect} from 'react-redux';
 import {RouteComponentProps} from 'react-router';
 import {ActionTypesEnum} from '../../enums/action-types.enum';
 import {NoteService} from '../../services/note.service';
+import {EventService} from '../../services/event.service';
 import './note-parser.less';
 import Button from '../../components/button/button';
 import NoteModel from '../../models/note.model';
-import Alert from '../../components/alert/alert';
 import {AlertModel} from '../../models/alert.model';
 import {AlertTypesEnum} from '../../enums/alert-types.enum';
+import {EventTypesEnum} from '../../enums/event-types.enum';
 import {removeSpaces} from '../../helpers/tools';
 
 type Props = {
@@ -20,7 +21,6 @@ type Props = {
 type State = {
     link: string,
     errorLinkMessage: string,
-    errorLinkAlert: AlertModel | null,
     linkParseProgress: boolean
 }
 
@@ -34,7 +34,6 @@ class NoteParser extends Component<RouteComponentProps & Props, State> {
         this.state = {
             link: this.props.creatingNote.url || '',
             errorLinkMessage: '',
-            errorLinkAlert: null,
             linkParseProgress: false
         };
 
@@ -52,38 +51,32 @@ class NoteParser extends Component<RouteComponentProps & Props, State> {
                 this.props.changeCreatingNote(data);
                 this.props.history.push('/create');
             } else {
-                this.setState({
-                    errorLinkMessage: 'Проблема с сервером. Попробуйте чуть позже.',
-                    errorLinkAlert: new AlertModel(
-                        AlertTypesEnum.error,
-                        'Проблема с сервером',
-                        'Попробуйте чуть позже.')
-                });
+                this.setState({errorLinkMessage: 'Проблема с сервером. Попробуйте чуть позже.'});
+                EventService.dispatchEvent(EventTypesEnum.alert, new AlertModel(
+                    AlertTypesEnum.error,
+                    'Проблема с сервером',
+                    'Попробуйте чуть позже.'))
             }
         }
     };
 
     private validateLink(): boolean {
         if (this.state.link.length === 0) {
-            this.setState({
-                errorLinkMessage: 'Не вижу ссылки',
-                errorLinkAlert: new AlertModel(
-                    AlertTypesEnum.error,
-                    'Не вижу ссылки.',
-                    'Введите ссылку в поле.')
-            });
+            this.setState({errorLinkMessage: 'Не вижу ссылки'});
+            EventService.dispatchEvent(EventTypesEnum.alert, new AlertModel(
+                AlertTypesEnum.error,
+                'Не вижу ссылки.',
+                'Введите ссылку в поле.'));
             return false;
         }
 
         const regExp = new RegExp(this.linkRegexp);
         if (!this.state.link.match(regExp)) {
-            this.setState({
-                errorLinkMessage: 'Не похоже на ссылку',
-                errorLinkAlert: new AlertModel(
-                    AlertTypesEnum.error,
-                    'Не похоже на ссылку.',
-                    'Проверьте ссылку на ошибки или укажите другую.')
-            });
+            this.setState({errorLinkMessage: 'Не похоже на ссылку'});
+            EventService.dispatchEvent(EventTypesEnum.alert, new AlertModel(
+                AlertTypesEnum.error,
+                'Не похоже на ссылку.',
+                'Проверьте ссылку на ошибки или укажите другую.'));
             return false;
         }
 
@@ -93,8 +86,6 @@ class NoteParser extends Component<RouteComponentProps & Props, State> {
     render() {
         return (
             <div>
-                <Alert isOpen={!!this.state.errorLinkAlert} data={this.state.errorLinkAlert}
-                       onClose={() => this.setState({errorLinkAlert: null})} />
                 <div className="step">
                     <h2>Шаг 1 / Введите ссылку</h2>
                     <span className="sub-header mb-32">
