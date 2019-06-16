@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import './tag.less';
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 
 type Props = {
     value: string,

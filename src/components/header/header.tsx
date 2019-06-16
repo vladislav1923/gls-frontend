@@ -14,9 +14,13 @@ class Header extends Component {
                 <div className="container">
                     <div className="header-wrapper">
                         <div className="header-left">
-                            <Logo/>
-                            <span className="title desktop-title">GLStorage</span>
-                            <span className="title tablet-title">GLS</span>
+                            <NavLink to="/">
+                                <Logo/>
+                            </NavLink>
+                            <NavLink to="/">
+                                <span className="title desktop-title">GLStorage</span>
+                                <span className="title tablet-title">GLS</span>
+                            </NavLink>
                         </div>
                         <div className="header-right">
                             <NavLink to="/parse">

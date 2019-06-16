@@ -6,7 +6,6 @@ import {UnsplashService} from '../../services/unsplash.service';
 import {NoteService} from '../../services/note.service';
 import {EventService} from '../../services/event.service';
 import {ScrollHandler} from '../../helpers/scroll-handler';
-import './note-creator.less';
 import Button from '../../components/button/button';
 import Tag from '../../components/tag/tag';
 import NoteModel from '../../models/note.model';
@@ -15,6 +14,7 @@ import {AlertModel} from '../../models/alert.model';
 import {AlertTypesEnum} from '../../enums/alert-types.enum';
 import {EventTypesEnum} from '../../enums/event-types.enum';
 import {removeLineTranslationSymbols, stringArrayToLowerCase} from '../../helpers/tools';
+import './note-creator.less';
 
 type Props = {
     creatingNote: NoteModel,
@@ -30,7 +30,8 @@ type State = {
     addingKeyword: string,
     linkWithoutImage: boolean,
     randomImageUrls: string[],
-    createNoteProgress: boolean
+    createNoteProgress: boolean,
+    isEdit: boolean
 }
 
 class NoteCreator extends Component<RouteComponentProps & Props, State> {
@@ -53,7 +54,8 @@ class NoteCreator extends Component<RouteComponentProps & Props, State> {
             addingKeyword: '',
             linkWithoutImage: false,
             randomImageUrls: [],
-            createNoteProgress: false
+            createNoteProgress: false,
+            isEdit: this.props.creatingNote._id !== null
         };
 
         this.unsplashService = new UnsplashService();
@@ -61,6 +63,7 @@ class NoteCreator extends Component<RouteComponentProps & Props, State> {
     }
 
     public async componentDidMount() {
+        ScrollHandler.scrollToId('step');
         await this.setImageUrl(this.props.creatingNote.imageUrl);
     }
 
@@ -86,7 +89,11 @@ class NoteCreator extends Component<RouteComponentProps & Props, State> {
     };
 
     public goToPrevStep = (): void => {
-        this.props.history.push('/parse');
+        if (this.state.isEdit) {
+            this.props.history.push('/');
+        } else {
+            this.props.history.push('/parse');
+        }
     };
 
     private setImageUrl = async (imageUrlFromProps: string | null): Promise<void> => {
@@ -118,6 +125,7 @@ class NoteCreator extends Component<RouteComponentProps & Props, State> {
                 'Давайте заголовок добавим',
                 'Он просто необходим.'));
             ScrollHandler.scrollToId('step');
+
             return false;
         }
 
@@ -131,13 +139,15 @@ class NoteCreator extends Component<RouteComponentProps & Props, State> {
         data.description = this.state.description;
         data.keywords = this.state.keywords;
         data.imageUrl = this.state.imageUrl;
-        const response = await this.noteService.createNote(data);
+        const response = this.state.isEdit ?
+            await this.noteService.updateNote(data) :
+            await this.noteService.createNote(data);
         this.setState({createNoteProgress: false});
         if (response.result) {
             EventService.dispatchEvent(EventTypesEnum.alert, new AlertModel(
                 AlertTypesEnum.success,
                 'Поздравляем!',
-                'Ссылка добавлена.'));
+                this.state.isEdit ? 'Сслылка обновлена' : 'Ссылка добавлена.'));
             this.props.changeCreatingNote(new NoteModel());
             this.props.history.push('/');
         } else {
@@ -153,11 +163,14 @@ class NoteCreator extends Component<RouteComponentProps & Props, State> {
         return (
             <div>
                 <div id="step" className="step">
-                    <h2>Шаг 2 / Добавление описания ссылки</h2>
+                    <h2>{this.state.isEdit ? 'Редактирование ссылки' : 'Шаг 2 / Добавление описания ссылки'}</h2>
                     <span className="sub-header mb-32">
-                        Проверьте правильность описания страницы, на которую введет ссылка.
-                        При необходимости исправьте описание и нажмите кнопку &laquo;Сохранить&raquo;.
-                        Нажмите &laquo;Назад&raquo; для изменения ссылки.
+                        {this.state.isEdit ?
+                            'Исправьте описания страницы, на которую введет ссылка и нажмите «Сохранить».' :
+                            'Проверьте правильность описания страницы, на которую введет ссылка.\n' +
+                            'При необходимости исправьте описание и нажмите «Сохранить».\n' +
+                            'Нажмите «Назад» для изменения ссылки.'
+                        }
                     </span>
                     <div className="grid grid-spaceBetween">
                         <div className="col-8_sm-12">

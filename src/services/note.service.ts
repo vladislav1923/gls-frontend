@@ -18,5 +18,13 @@ export class NoteService extends BaseService {
         return await this.post(`notes`, data, NoteModel);
     }
 
+    public async updateNote(data: NoteModel): Promise<ResponseModel<NoteModel>> {
+        return await this.put(`notes`, data, NoteModel);
+    }
+
+    public async deleteNote(noteId: string): Promise<ResponseModel<NoteModel>> {
+        return await this.delete(`notes?id=${noteId}`, NoteModel);
+    }
+
 }
 

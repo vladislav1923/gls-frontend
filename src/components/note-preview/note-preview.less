@@ -1,0 +1,89 @@
+@import '../../styles/vars';
+
+.note-preview {
+  position: relative;
+
+  &-wrapper {
+    cursor: pointer;
+  }
+
+  &-controls {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  &-control {
+    display: flex;
+    justify-content: center;
+    background-color: @whiteColor;
+    border-radius: 4px;
+    padding: 6px;
+    cursor: pointer;
+
+    &:hover {
+      background-color: @darkGrayColor;
+    }
+  }
+
+  &-image {
+    img {
+      width: 100%;
+      object-fit: cover;
+    }
+  }
+
+  &-text {
+    display: flex;
+    flex-direction: column;
+    padding: 16px 0;
+  }
+
+  &-title {
+    font-family: @fontBold;
+    font-size: 16px;
+    line-height: 18px;
+    color: @blackColor;
+  }
+
+  &-desc {
+    font-family: @fontRegular;
+    font-size: 14px;
+    line-height: 16px;
+    color: @darkGrayColor;
+  }
+
+  &-tag {
+    font-family: @fontRegular;
+    font-size: 14px;
+    color: @darkGrayColor;
+    border: 1px solid @darkGrayColor;
+    border-radius: 4px;
+    padding: 5px;
+    margin: 0 8px 16px 0;
+    cursor: pointer;
+
+    &:hover {
+      color: @blackColor;
+      border-color: @blackColor;
+    }
+  }
+
+  &-clickable {
+    font-family: @fontRegular;
+    font-size: 14px;
+    color: @errorColor;
+
+    span {
+      display: inline-block;
+      margin-left: 4px;
+    }
+
+    &.done {
+      color: @successColor;
+    }
+  }
+
+}
