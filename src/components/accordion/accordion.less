@@ -1,0 +1,53 @@
+@import '../../styles/vars';
+
+.accordion {
+
+  &-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding: 14px 0;
+    border-bottom: 2px solid @lightBlueColor;
+    cursor: pointer;
+
+    &.active,
+    &:hover {
+      border-color: @darkBlueColor;
+    }
+  }
+
+  &-title {
+    font-family: @fontBold;
+    font-size: 18px;
+    line-height: 18px;
+    color: @blackColor;
+  }
+
+  &-chevron {
+    color: @darkGrayColor;
+    margin-right: 14px;
+    transition: transform .4s linear;
+
+    &.active {
+      transform: rotate(180deg);
+    }
+  }
+
+  &-body {
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition: all .6s linear;
+
+    &.active {
+      max-height: 400px;
+      overflow: visible;
+      opacity: 1;
+    }
+  }
+
+}
+
+
+

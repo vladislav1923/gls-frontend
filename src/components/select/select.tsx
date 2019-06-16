@@ -6,7 +6,8 @@ import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 type Props = {
     value: string,
     list: string[],
-    onChange: (value: string) => void
+    onChange: (value: string) => void,
+    placeholder?: string
 }
 
 type State = {
@@ -28,13 +29,13 @@ class Select extends Component<Props, State> {
             <div className="select-wrapper">
                 {isMobile ?
                     <select name="" id="" value={this.props.value} onChange={(e) => this.props.onChange(e.target.value)}>
-                        <option value="">Не выбрано</option>
+                        <option value="">{this.props.placeholder || 'Не выбрано'}</option>
                         {this.props.list.map((item: string) =>
                             <option key={item} value={item}>{item}</option>
                         )}
                     </select> :
                     <div className="select" onClick={() => this.setState({isOpen: !this.state.isOpen})}>
-                        <div className="value">{this.props.value || 'Не выбрано'}</div>
+                        <div className="value">{this.props.value || this.props.placeholder || 'Не выбрано'}</div>
                         <ul className={'list' + (this.state.isOpen ? ' active' : '')}>
                             {this.props.list.map((item: string) =>
                                 <li key={item} className="option" onClick={() => this.props.onChange(item)}>{item}</li>

@@ -4,7 +4,7 @@ import ResponseModel from "../models/response.model";
 
 export class NoteService extends BaseService {
 
-    public async getNotesList(): Promise<ResponseModel<NoteModel>> {
+    public async getNotesList(page: number, searchString: string, searchKeywords: string[]): Promise<ResponseModel<NoteModel>> {
         return await this.getList('notes', NoteModel);
     }
 

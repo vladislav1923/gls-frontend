@@ -64,12 +64,14 @@
       max-height: 0;
       list-style: none;
       overflow-x: hidden;
-      transition: max-height .2s linear;
+      transition: all .3s linear;
       box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
+      opacity: 0;
       z-index: 60;
 
       &.active {
         max-height: 300px;
+        opacity: 1;
       }
 
       .option {
